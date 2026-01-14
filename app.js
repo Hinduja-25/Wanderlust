@@ -41,10 +41,7 @@ app.use(express.urlencoded({extended:true}));
 const methodOverride=require("method-override");
 app.use(methodOverride("_method"));
 
-//const mongo_url='mongodb://127.0.0.1:27017/wanderlust';
 const dbUrl=process.env.ATLASDB_URL;
-
-
 
 main()
 .then((res)=>{
@@ -103,30 +100,14 @@ app.use((req,res,next)=>{
     next()
 })
 
-app.get("/demouser",async(req,res)=>{
-    let fakeUser=new User({
-        email:"hahaha@gmail.com",
-        username:"pavitra123"
-    })
-    let newuser=await User.register(fakeUser,"helloworld")
-
-    res.send(newuser)
-})
-
 
 app.use("/listing",listingRouter)
 app.use("/listing/:id/reviews",reviewRouter)
 app.use("/",userRouter)
 
 
-
-// app.use("/",(req, res, next) => {//for any other route expect the above 
-//   next(new ExpressError(404, "Page not found"));
-// });
-
 app.use((err,req,res,next)=>{
     let {statusCode=500,message="some random error"}=err;
     res.render("error.ejs",{message,err,statusCode});
-   // res.status(statusCode).send(message);
 })
 
